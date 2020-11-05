@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper
+        namespace="com.catc.hive.mapper.AdsbCountMapper">
+    <resultMap id="AdsbCountResult" type="com.catc.hive.entity.AdsbCount">
+        <result property="id" column="id" />
+        <result property="count" column="count" />
+        <result property="recordtime" column="recordtime" />
+    </resultMap>
+    <insert id="save" parameterType="com.catc.hive.entity.AdsbCount"
+            flushCache="true">
+        <selectKey keyProperty="id" resultType="java.lang.String" order="BEFORE">
+            select replace(uuid(), '-', '')
+        </selectKey>
+        INSERT INTO adsbcount(
+        <if test="id != null and id != ''">id,</if>
+        <if test="count != null and count != ''">count,</if>
+        recordtime
+        )
+        VALUES(
+        <if test="id != null and id != ''">#{id},</if>
+        <if test="count != null and count != ''">#{count},</if>
+        sysdate()
+        )
+    </insert>
+
+    <select id="getlist" parameterType="com.catc.hive.model.QueryModel" resultMap="AdsbCountResult">
+        SELECT * from adsbcount
+        <where>
+            <if test="startdate != null and startdate != ''"> recordtime &gt;= #{startdate,jdbcType=DATE}</if>
+            <if test="enddate != null and enddate != ''">and recordtime &lt;= #{enddate,jdbcType=DATE}</if>
+        </where>
+        ORDER BY recordtime DESC
+    </select>
+
+    <select id="getAll" parameterType="com.catc.hive.model.QueryModel" resultMap="AdsbCountResult">
+        SELECT * from adsbcount
+        <where>
+            <if test="startdate != null and startdate != ''"> recordtime &gt;= #{startdate,jdbcType=DATE}</if>
+            <if test="enddate != null and enddate != ''">and recordtime &lt;= #{enddate,jdbcType=DATE}</if>
+        </where>
+        ORDER BY recordtime DESC limit 1,100
+    </select>
+
+    <delete id="deleteByDate" parameterType="java.util.Date">
+
+        DELETE from adsbcount where recordtime &lt;= #{date}
+    </delete>
+</mapper>

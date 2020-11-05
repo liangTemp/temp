@@ -1,0 +1,62 @@
+hive:
+  url: jdbc:hive2://132.138.7.136:10000/teledata
+  driver-class-name: org.apache.hive.jdbc.HiveDriver
+  type: com.alibaba.druid.pool.DruidDataSource
+  user: root
+  password: 123456
+
+  initialSize: 1
+  minIdle: 3
+  maxActive: 20
+  maxWait: 60000
+  timeBetweenEvictionRunsMillis: 60000
+  minEvictableIdleTimeMillis: 30000
+  validationQuery: select 1
+  testWhileIdle: true
+  testOnBorrow: false
+  testOnReturn: false
+  poolPreparedStatements: true
+  maxPoolPreparedStatementPerConnectionSize: 20
+
+spring:
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    username: root
+    password: 123456
+    jdbc-url: jdbc:mysql://132.138.7.103:3306/dynamicflight?serverTimezone=GMT%2B8&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+    initialSize: 1
+    minIdle: 3
+    maxActive: 20
+    maxWait: 60000
+    timeBetweenEvictionRunsMillis: 60000
+    minEvictableIdleTimeMillis: 30000
+    validationQuery: select 'x'
+    testWhileIdle: true
+    testOnBorrow: false
+    testOnReturn: false
+    poolPreparedStatements: true
+    maxPoolPreparedStatementPerConnectionSize: 20
+    filters: stat,wall,slf4j
+    connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
+
+# mybatis:
+#   mapper-locations:  classpath*:mybatis/**/*Mapper.xml
+#   type-aliases-package: com.catc.hive
+#   configLocation: classpath:mybatis/mybatis-config.xml
+# MyBatis
+mybatis:
+    # 搜索指定包别名
+    typeAliasesPackage: com.catc.hive
+    # 配置mapper的扫描，找到所有的mapper.xml映射文件
+    mapperLocations: classpath*:mybatis/**/*Mapper.xml
+    # 加载全局的配置文件
+    configLocation: classpath:mybatis/mybatis-config.xml
+# PageHelper
+pagehelper:
+  # 使用Mysql数据源
+  helperDialect: mysql
+  reasonable: true
+  supportMethodsArguments: true
+  params: count=countSql
